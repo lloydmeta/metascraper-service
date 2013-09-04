@@ -6,7 +6,7 @@ run_list(
   "role[base]",
   "role[java_node]",
   "role[sbt_node]",
-  "recipe[play]",
+  "recipe[play]"
 )
 
 # removed "role[rvm_node]", "role[postgres_node]", and "role[redis_node]" for now
