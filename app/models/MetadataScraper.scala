@@ -3,18 +3,20 @@ package models
 import play.libs.Akka
 import akka.routing.SmallestMailboxRouter
 import akka.pattern.ask
+
 import com.beachape.metascraper.Messages._
 import com.beachape.metascraper.ScraperActor
 import play.api.libs.json.{JsValue, Json}
 import scala.concurrent.Future
+import akka.util.Timeout
+import scala.concurrent.duration._
+import play.api.libs.concurrent.Execution.Implicits._
 
 /**
  * Companion object to hold ScraperActor references
  */
 object MetadataScraper {
-
   type Url = String
-
   lazy val metadataScraperActorsRoundRobin = Akka.system.actorOf(ScraperActor().withRouter(SmallestMailboxRouter(5)), "router")
 
   def apply(url: Url): MetadataScraper = {
@@ -37,6 +39,7 @@ class MetadataScraper(val url: Url) {
    * @return Future Json
    */
   def scrape(): Future[JsValue] = {
+    implicit val timeout = Timeout(30 seconds)
     val futureResult = ask(MetadataScraper.metadataScraperActorsRoundRobin, ScrapeUrl(url)).mapTo[Either[FailedToScrapeUrl, ScrapedData]]
     futureResult map {
       case Left(fail) => failedScrapeToJson(fail)
