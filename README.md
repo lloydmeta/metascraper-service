@@ -1,4 +1,4 @@
-# Metascraper service
+# Metascraper service [![Build Status](https://travis-ci.org/lloydmeta/metascraper-service.png?branch=master)](https://travis-ci.org/lloydmeta/metascraper-service)
 
 A REST based API application that uses the [Metascraper](https://github.com/lloydmeta/metascraper) library to scrape URLs for metadata
 
