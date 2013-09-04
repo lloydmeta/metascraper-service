@@ -1,0 +1,46 @@
+SITE
+  remote: http://community.opscode.com/api/v1
+  specs:
+    apt (2.1.1)
+    build-essential (1.4.2)
+    chef-sbt (0.0.1)
+    chef_handler (1.1.4)
+    java (1.13.0)
+      windows (>= 0.0.0)
+    locale (0.0.2)
+    openssl (1.1.0)
+    postgresql (3.0.4)
+      apt (>= 0.0.0)
+      build-essential (>= 0.0.0)
+      openssl (>= 0.0.0)
+    redisio (1.7.0)
+      ulimit (>= 0.1.2)
+    ulimit (0.3.1)
+    windows (1.10.0)
+      chef_handler (>= 0.0.0)
+
+GIT
+  remote: git://github.com/fnichol/chef-rvm.git
+  ref: v0.9.0
+  sha: 4a408e5d6c5a52c37388a799c516430263339849
+  specs:
+    rvm (0.9.0)
+
+GIT
+  remote: git@github.com:BCS-io/chef-locale.git
+  ref: master
+  sha: 42df55776e92e2a43b907444b51ccc935a59b726
+  specs:
+    chef-locale (0.0.1)
+      locale (>= 0.0.0)
+
+DEPENDENCIES
+  apt (>= 0)
+  chef-locale (>= 0)
+  chef-sbt (>= 0)
+  java (>= 0)
+  openssl (>= 0)
+  postgresql (>= 0)
+  redisio (>= 0)
+  rvm (>= 0)
+

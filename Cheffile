@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+#^syntax detection
+
+site 'http://community.opscode.com/api/v1'
+
+cookbook 'apt'
+
+cookbook 'chef-locale',
+  :git => "git@github.com:BCS-io/chef-locale.git"
+
+cookbook 'openssl'
+
+cookbook 'postgresql'
+
+cookbook 'rvm',
+  :git => 'git://github.com/fnichol/chef-rvm.git',
+  :ref => 'v0.9.0'
+
+cookbook 'redisio'
+
+cookbook 'java'
+
+cookbook 'chef-sbt'
