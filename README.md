@@ -1,6 +1,22 @@
 # Metascraper service [![Build Status](https://travis-ci.org/lloydmeta/metascraper-service.png?branch=master)](https://travis-ci.org/lloydmeta/metascraper-service)
 
-A REST based API application that uses the [Metascraper](https://github.com/lloydmeta/metascraper) library to scrape URLs for metadata
+A RESTful Play2-based API application that uses the [Metascraper](https://github.com/lloydmeta/metascraper) library to scrape URLs for metadata. Works rather well because of Play's integration with Akka.
+
+# Heroku
+
+This repository is ready to be pushed / deployed to Heroku as is.
+
+# Running
+
+If you've got Play2 and Scala set up, simply run it as you normally would run your Play applications.
+
+## Vagrant
+
+Vagrant + Chef-solo + Librarian-chef are also set up if you want to run it from a VM. To provision:
+
+1. `bundle install` to download necessary gems
+2. `librarian-chef install` to download cookbooks
+3. `vagrant up` to provision
 
 ## Example usage
 
