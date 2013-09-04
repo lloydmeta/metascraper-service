@@ -16,3 +16,5 @@ dist
 /cookbooks
 /tmp
 .vagrant*
+Gemfile
+Gemfile.lock
