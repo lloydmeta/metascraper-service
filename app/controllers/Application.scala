@@ -6,6 +6,7 @@ import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.libs.concurrent.Execution.Implicits._
+import play.api.libs.json.Json
 
 object Application extends Controller {
 
@@ -24,10 +25,14 @@ object Application extends Controller {
    * Endpoint that asynchronously does the scraping
    */
   def scrape = Action { implicit request =>
-    Async {
+    try {
       val formValues = scrapeForm.bindFromRequest.get
-      val scraper = MetadataScraper(formValues._1)
-      scraper.scrape().map(Ok(_))
+      Async {
+        val scraper = MetadataScraper(formValues._1)
+        scraper.scrape().map(Ok(_))
+      }
+    } catch {
+      case e: Exception => Ok(Json.obj("message" -> "Params error"))
     }
   }
 }
