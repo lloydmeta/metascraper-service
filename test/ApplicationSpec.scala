@@ -31,8 +31,24 @@ class ApplicationSpec extends Specification {
       }
     }
 
-    "respond to POST on /scrape" in  {
+    "respond to OPTIONS on /scrape with the proper headers" in {
       running(FakeApplication()) {
+        val requiredOptionsHeaders = Map(
+          "Access-Control-Allow-Origin" -> "*",
+          "Access-Control-Allow-Methods" -> "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers" -> "Content-Type, X-Requested-With, Accept",
+          "Access-Control-Max-Age" -> (60 * 60 * 24).toString)
+        val options = route(FakeRequest(method = "OPTIONS", "/scrape"))
+        val Some(result) = options
+        requiredOptionsHeaders.foreach { pair => headers(result) must havePair(pair) }
+      }
+    }
+
+    "respond to POST on /scrape with the proper headers" in  {
+      running(FakeApplication()) {
+        val requiredHeaders = Map(
+          "Access-Control-Allow-Origin" -> "*",
+          "Access-Control-Allow-Methods" -> "GET, POST, PUT, DELETE, OPTIONS")
         val json = Json.obj(
           "url" -> "http://beachape.com"
         )
@@ -47,6 +63,7 @@ class ApplicationSpec extends Specification {
         val Some(result) = request
         status(result) must equalTo(OK)
         contentType(result) must beSome.which(_ == "application/json")
+        requiredHeaders.foreach { pair => headers(result) must havePair(pair) }
       }
     }
   }

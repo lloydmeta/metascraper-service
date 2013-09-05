@@ -2,6 +2,9 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+# CORS
+OPTIONS /*url                       controllers.Application.options(url: String)
+
 # Home page
 GET     /                           controllers.Application.index
 
@@ -9,4 +12,4 @@ GET     /                           controllers.Application.index
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 # Scrape
-POST    /scrape                      controllers.Application.scrape()
+POST    /scrape                     controllers.Application.scrape()
