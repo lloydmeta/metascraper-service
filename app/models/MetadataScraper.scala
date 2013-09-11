@@ -17,7 +17,7 @@ import play.api.libs.concurrent.Execution.Implicits._
  */
 object MetadataScraper {
   type Url = String
-  lazy val metadataScraperActorsRoundRobin = Akka.system.actorOf(ScraperActor().withRouter(SmallestMailboxRouter(5)), "router")
+  lazy val metadataScraperActorsRoundRobin = Akka.system.actorOf(ScraperActor().withRouter(SmallestMailboxRouter(20)), "router")
 
   def apply(url: Url): MetadataScraper = {
     new MetadataScraper(url)
@@ -40,7 +40,9 @@ class MetadataScraper(val url: Url) {
    */
   def scrape(): Future[JsValue] = {
     implicit val timeout = Timeout(30 seconds)
-    val futureResult = ask(MetadataScraper.metadataScraperActorsRoundRobin, ScrapeUrl(url)).mapTo[Either[FailedToScrapeUrl, ScrapedData]]
+    val futureResult = ask(
+      MetadataScraper.metadataScraperActorsRoundRobin,
+      ScrapeUrl(url, userAgent = "GeosocialMetacraper")).mapTo[Either[Throwable, ScrapedData]]
     futureResult map {
       case Left(fail) => failedScrapeToJson(fail)
       case Right(data) => scrapedDataToJson(data)
@@ -68,9 +70,9 @@ class MetadataScraper(val url: Url) {
    * @param fail FailedToScrapeUrl message object
    * @return JsValue
    */
-  def failedScrapeToJson(fail: FailedToScrapeUrl): JsValue = {
+  def failedScrapeToJson(fail: Throwable): JsValue = {
     Json.obj(
-      "message" -> fail.message
+      "message" -> fail.getMessage
     )
   }
 }

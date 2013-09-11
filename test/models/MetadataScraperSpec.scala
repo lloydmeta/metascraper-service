@@ -2,7 +2,7 @@ package models
 
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.{BeforeAndAfter, FunSpec}
-import com.beachape.metascraper.Messages.{FailedToScrapeUrl, ScrapedData}
+import com.beachape.metascraper.Messages.ScrapedData
 
 class MetadataScraperSpec extends FunSpec with ShouldMatchers with BeforeAndAfter {
 
@@ -40,12 +40,12 @@ class MetadataScraperSpec extends FunSpec with ShouldMatchers with BeforeAndAfte
 
   describe("#failedScrapeToJson") {
 
-    val failed = FailedToScrapeUrl(message = "oops")
+    val failed = new Throwable("lol")
 
     it("should respond with a JsValue that is essentially a serialised version of the FailedToScrapeUrl object") {
       val jsonValue = scraper.failedScrapeToJson(failed)
       val Some(message) = (jsonValue \ "message").asOpt[String]
-      message should be(failed.message)
+      message should be(failed.getMessage)
     }
   }
 
