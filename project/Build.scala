@@ -11,7 +11,7 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     jdbc,
     anorm,
-    "com.beachape.metascraper" %% "metascraper" % "0.1.0-SNAPSHOT",
+    "com.beachape.metascraper" %% "metascraper" % "0.1.1",
     "org.scalatest" %% "scalatest" % "1.9.1" % "test"
   )
 
@@ -19,6 +19,7 @@ object ApplicationBuild extends Build {
   val main = play.Project(appName, appVersion, appDependencies).settings(
     // Add your own project settings here
     resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
+    resolvers += "Sonatype Nexus Releases" at "https://oss.sonatype.org/content/repositories/releases",
     scalaVersion := "2.10.2"
   )
 
