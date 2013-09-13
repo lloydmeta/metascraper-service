@@ -18,6 +18,8 @@ cookbook 'rvm',
 
 cookbook 'redisio'
 
+cookbook 'memcached'
+
 cookbook 'java'
 
 cookbook 'chef-sbt'
