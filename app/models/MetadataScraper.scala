@@ -54,7 +54,7 @@ class MetadataScraper(val url: Url) {
       case None => {
         val futureResult = ask(
           MetadataScraper.metadataScraperActorsRoundRobin,
-          ScrapeUrl(urlToCacheKey, userAgent = "GeosocialMetacraper")).mapTo[Either[Throwable, ScrapedData]]
+          ScrapeUrl(url, userAgent = "GeosocialMetacraper")).mapTo[Either[Throwable, ScrapedData]]
         // We are inside a future of a future
         futureResult map {
           case Left(fail) => failedScrapeToJson(fail)
