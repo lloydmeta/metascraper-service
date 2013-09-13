@@ -8,6 +8,9 @@ SITE
     java (1.13.0)
       windows (>= 0.0.0)
     locale (0.0.2)
+    memcached (1.5.0)
+      runit (~> 1.0)
+      yum (>= 0.0.0)
     openssl (1.1.0)
     postgresql (3.0.4)
       apt (>= 0.0.0)
@@ -15,9 +18,13 @@ SITE
       openssl (>= 0.0.0)
     redisio (1.7.0)
       ulimit (>= 0.1.2)
+    runit (1.2.0)
+      build-essential (>= 0.0.0)
+      yum (>= 0.0.0)
     ulimit (0.3.1)
     windows (1.10.0)
       chef_handler (>= 0.0.0)
+    yum (2.3.2)
 
 GIT
   remote: git://github.com/fnichol/chef-rvm.git
@@ -39,6 +46,7 @@ DEPENDENCIES
   chef-locale (>= 0)
   chef-sbt (>= 0)
   java (>= 0)
+  memcached (>= 0)
   openssl (>= 0)
   postgresql (>= 0)
   redisio (>= 0)
