@@ -11,12 +11,16 @@ import scala.concurrent.Future
 import akka.util.Timeout
 import scala.concurrent.duration._
 import play.api.libs.concurrent.Execution.Implicits._
+import play.api.cache.Cache
+import play.api.Play.current
 
 /**
  * Companion object to hold ScraperActor references
  */
 object MetadataScraper {
+
   type Url = String
+  val cachedUrlTTLinSeconds: Int = 3600
   lazy val metadataScraperActorsRoundRobin = Akka.system.actorOf(ScraperActor().withRouter(SmallestMailboxRouter(20)), "router")
 
   def apply(url: Url): MetadataScraper = {
@@ -40,12 +44,23 @@ class MetadataScraper(val url: Url) {
    */
   def scrape(): Future[JsValue] = {
     implicit val timeout = Timeout(30 seconds)
-    val futureResult = ask(
-      MetadataScraper.metadataScraperActorsRoundRobin,
-      ScrapeUrl(url, userAgent = "GeosocialMetacraper")).mapTo[Either[Throwable, ScrapedData]]
-    futureResult map {
-      case Left(fail) => failedScrapeToJson(fail)
-      case Right(data) => scrapedDataToJson(data)
+    // If we have something cached, send it back wrapped in a Future,
+    // Otherwise, ask a ScraperActor for it and cache
+    getCachedJsValueForUrl() match {
+      case Some(jsValue) => Future.successful(jsValue)
+      case None => {
+        val futureResult = ask(
+          MetadataScraper.metadataScraperActorsRoundRobin,
+          ScrapeUrl(url, userAgent = "GeosocialMetacraper")).mapTo[Either[Throwable, ScrapedData]]
+        futureResult map {
+          case Left(fail) => failedScrapeToJson(fail)
+          case Right(data) => {
+            val scrapedDataJson = scrapedDataToJson(data)
+            cacheJsValueForUrl(scrapedDataJson)
+            scrapedDataJson
+          }
+        }
+      }
     }
   }
 
@@ -74,5 +89,28 @@ class MetadataScraper(val url: Url) {
     Json.obj(
       "message" -> fail.getMessage
     )
+  }
+
+  /**
+   * Returns Option[JsValue] if the information for a URL exists in the
+   * cache
+   *
+   * @return Option[JsValue]
+   */
+  def getCachedJsValueForUrl(): Option[JsValue] = Cache.getAs[JsValue](url)
+
+  /**
+   * Throws a given JsValue into the cache
+   * @param jsValue value to be cached
+   */
+  def cacheJsValueForUrl(jsValue: JsValue) {
+    Cache.set(url, jsValue, MetadataScraper.cachedUrlTTLinSeconds)
+  }
+
+  /**
+   * Removes the stored value in the cache for this MetadataScraper's URL
+   */
+  def removeCachedValueForUrl() {
+    Cache.remove(url)
   }
 }
