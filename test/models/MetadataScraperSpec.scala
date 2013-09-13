@@ -49,7 +49,7 @@ class MetadataScraperSpec extends FunSpec with ShouldMatchers with BeforeAndAfte
 
     it("should respond with a JsValue that is essentially a serialised version of the FailedToScrapeUrl object") {
       val jsonValue = scraper.failedScrapeToJson(failed)
-      val Some(message) = (jsonValue \ "message").asOpt[String]
+      val Some(message) = (jsonValue \ "error").asOpt[String]
       message should be(failed.getMessage)
     }
   }

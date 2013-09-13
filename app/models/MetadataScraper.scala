@@ -91,7 +91,7 @@ class MetadataScraper(val url: Url) {
    */
   def failedScrapeToJson(fail: Throwable): JsValue = {
     Json.obj(
-      "message" -> fail.getMessage
+      "error" -> fail.getMessage
     )
   }
 
