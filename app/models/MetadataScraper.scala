@@ -20,7 +20,7 @@ import play.api.Play.current
 object MetadataScraper {
 
   type Url = String
-  val cachedUrlTTLinSeconds: Int = 3600
+  val cachedUrlTTLinSeconds: Int = 600
   lazy val metadataScraperActorsRoundRobin = Akka.system.actorOf(ScraperActor().withRouter(SmallestMailboxRouter(20)), "router")
 
   def apply(url: Url): MetadataScraper = {
@@ -97,14 +97,14 @@ class MetadataScraper(val url: Url) {
    *
    * @return Option[JsValue]
    */
-  def getCachedJsValueForUrl(): Option[JsValue] = Cache.getAs[JsValue](url)
+  def getCachedJsValueForUrl(): Option[JsValue] = Cache.getAs[String](url).map(Json.parse(_))
 
   /**
    * Throws a given JsValue into the cache
    * @param jsValue value to be cached
    */
   def cacheJsValueForUrl(jsValue: JsValue) {
-    Cache.set(url, jsValue, MetadataScraper.cachedUrlTTLinSeconds)
+    Cache.set(url, Json.stringify(jsValue), MetadataScraper.cachedUrlTTLinSeconds)
   }
 
   /**
