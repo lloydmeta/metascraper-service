@@ -6,6 +6,8 @@ import play.api.test.Helpers._
 import com.beachape.metascraper.Messages.ScrapedData
 import scala.Some
 import play.api.test.FakeApplication
+import scala.concurrent.ExecutionContext
+import ExecutionContext.Implicits.global
 
 class MetadataScraperSpec extends FunSpec with ShouldMatchers with BeforeAndAfter {
 
@@ -58,7 +60,7 @@ class MetadataScraperSpec extends FunSpec with ShouldMatchers with BeforeAndAfte
     it("should return None if passed a url that was never cached") {
       running(FakeApplication()) {
         scraper.removeCachedValueForUrl()
-        scraper.getCachedJsValueForUrl() should be(None)
+        scraper.getCachedJsValueForUrl().map(_ should be(None))
       }
     }
 
@@ -66,7 +68,7 @@ class MetadataScraperSpec extends FunSpec with ShouldMatchers with BeforeAndAfte
       running(FakeApplication()) {
         scraper.removeCachedValueForUrl()
         scraper.cacheJsValueForUrl(scraper.scrapedDataToJson(scrapedData))
-        scraper.getCachedJsValueForUrl() should be(Some(scraper.scrapedDataToJson(scrapedData)))
+        scraper.getCachedJsValueForUrl().map(_ should be(Some(scraper.scrapedDataToJson(scrapedData))))
       }
     }
   }
@@ -77,7 +79,7 @@ class MetadataScraperSpec extends FunSpec with ShouldMatchers with BeforeAndAfte
       running(FakeApplication()) {
         scraper.cacheJsValueForUrl(scraper.scrapedDataToJson(scrapedData))
         scraper.removeCachedValueForUrl()
-        scraper.getCachedJsValueForUrl() should be(None)
+        scraper.getCachedJsValueForUrl().map(_ should be(None))
       }
     }
 
