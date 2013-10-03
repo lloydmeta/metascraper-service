@@ -1,6 +1,6 @@
 # Metascraper service [![Build Status](https://travis-ci.org/lloydmeta/metascraper-service.png?branch=master)](https://travis-ci.org/lloydmeta/metascraper-service)
 
-A RESTful Play2-based API application that uses the [Metascraper](https://github.com/lloydmeta/metascraper) library to scrape URLs for metadata. Works rather well because of Play's integration with Akka.
+A non-blocking RESTful Play2-based API application that uses the [Metascraper](https://github.com/lloydmeta/metascraper) library to scrape URLs for metadata. Works rather well because of Play's integration with Akka.
 
 # Heroku
 
