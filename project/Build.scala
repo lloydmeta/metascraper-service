@@ -11,7 +11,7 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     jdbc,
     anorm,
-    "com.beachape.metascraper" %% "metascraper" % "0.2.3",
+    "com.beachape.metascraper" %% "metascraper" % "0.2.4",
     "com.github.mumoshu" %% "play2-memcached" % "0.3.0.2",
     "org.scalatest" %% "scalatest" % "1.9.1" % "test"
   )
